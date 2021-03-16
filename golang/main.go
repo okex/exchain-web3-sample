@@ -1,13 +1,14 @@
 package main
 
 import (
+	bytes2 "bytes"
 	"context"
 	"crypto/ecdsa"
 	"encoding/hex"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"math/big"
-	"strings"
 	"time"
 
 	authclient "github.com/cosmos/cosmos-sdk/x/auth/client/utils"
@@ -29,71 +30,26 @@ var (
 	host    = "http://localhost:8545"
 	privKey = "e47a1fe74a7f9bfa44a362a3c6fbe96667242f62e6b8e138b3f61bd431c3215d"
 
-	sampleContractByteCode = common.Hex2Bytes("608060405234801561001057600080fd5b5060c78061001f6000396000f3fe6080604052348015600f57600080fd5b506004361060325760003560e01c80632e64cec11460375780636057361d146053575b600080fd5b603d607e565b6040518082815260200191505060405180910390f35b607c60048036036020811015606757600080fd5b81019080803590602001909291905050506087565b005b60008054905090565b806000819055505056fea2646970667358221220e102a9b12d5fffc915bf859246f362c24f40a7752ea826e7fe9c5e640bcd6d4a64736f6c63430007060033")
-	sampleContractABIStr   = `
-[
-	{
-		"inputs": [],
-		"name": "retrieve",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "num",
-				"type": "uint256"
-			}
-		],
-		"name": "store",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	}
-]`
-	sampleContractABI, _ = abi.JSON(strings.NewReader(sampleContractABIStr))
+	sampleContractByteCode []byte
+	sampleContractABI      abi.ABI
 )
 
-// Sample contract:
-//http://remix.ethereum.org/#optimize=true&runs=200&evmVersion=null&version=soljson-v0.7.6+commit.7338295f.js
-//1_Storage.sol
-//
-//// SPDX-License-Identifier: GPL-3.0
-//
-//pragma solidity >=0.7.0 <0.8.0;
-//
-///**
-// * @title Storage
-// * @dev Store & retrieve value in a variable
-// */
-//contract Storage {
-//
-//uint256 number;
-//
-///**
-// * @dev Store value in variable
-// * @param num value to store
-// */
-//function store(uint256 num) public {
-//number = num;
-//}
-//
-///**
-// * @dev Return value
-// * @return value of 'number'
-// */
-//function retrieve() public view returns (uint256){
-//return number;
-//}
-//}
+func init() {
+	bin, err := ioutil.ReadFile("../sample_contract/Storage.bin")
+	if err != nil {
+		log.Fatal(err)
+	}
+	sampleContractByteCode = common.Hex2Bytes(string(bin))
+
+	abiByte, err := ioutil.ReadFile("../sample_contract/Storage.abi")
+	if err != nil {
+		log.Fatal(err)
+	}
+	sampleContractABI, err = abi.JSON(bytes2.NewReader(abiByte))
+	if err != nil {
+		log.Fatal(err)
+	}
+}
 
 func main() {
 	//

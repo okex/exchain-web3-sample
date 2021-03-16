@@ -1,4 +1,4 @@
-module github.com/okex/okexchain-web3-sample
+module github.com/okex/okexchain-web3-sample/golang
 
 go 1.15
 
