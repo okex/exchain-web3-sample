@@ -107,7 +107,7 @@ func main() {
 	watch <- nonce
 
 	nonceF := uint64(0)
-	count := uint64(0)
+	count := nonce / 10
 	for {
 		err := writeContract(client, fromAddress, gasPrice, chainID, privateKey, contractAddr)
 		if err != nil {
