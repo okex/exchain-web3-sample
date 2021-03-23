@@ -122,7 +122,7 @@ func main() {
 			nonceF = nonce
 			count++
 		}
-		time.Sleep(time.Second * 1)
+		time.Sleep(time.Second * 3)
 	}
 	//
 	// 3. call contract(read)
