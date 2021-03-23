@@ -239,7 +239,7 @@ func writeContract(client *ethclient.Client,
 
 func writeContractTx(nonce uint64, contractAddr common.Address, gasPrice *big.Int) *types.Transaction {
 	value := big.NewInt(0)
-	gasLimit := uint64(254612)
+	gasLimit := uint64(30000000)
 
 	//num := big.NewInt(999)
 	data, err := sampleContractABI.Pack("add")
