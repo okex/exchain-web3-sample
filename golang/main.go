@@ -131,7 +131,7 @@ func main() {
 }
 
 func watchDB() {
-	path := "/root/okexchain/tools/_cache_evm_cache_evm/data"
+	path := "/root/okexchain/tools/_cache_evm/data"
 	for nonce := range watch {
 		dirSize := readDir(path)
 		fmt.Printf("%d,%0.2f\n", nonce, float64(dirSize)/1024/1024)
