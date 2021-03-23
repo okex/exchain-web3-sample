@@ -107,7 +107,7 @@ func main() {
 	watch <- nonce
 
 	nonceF := uint64(0)
-	count := uint64(0)
+	count := nonce / 10
 	for {
 		err := writeContract(client, fromAddress, gasPrice, chainID, privateKey, contractAddr)
 		if err != nil {
@@ -117,12 +117,12 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		if nonce/50 == count+1 && nonce != nonceF {
+		if nonce/10 == count+1 && nonce != nonceF {
 			watch <- nonce
 			nonceF = nonce
 			count++
 		}
-		time.Sleep(time.Second * 1)
+		time.Sleep(time.Second * 3)
 	}
 	//
 	// 3. call contract(read)
@@ -181,8 +181,8 @@ func deployContract(client *ethclient.Client,
 	}
 
 	// 4. get the contract address based on tx hash
-	hash := getTxHash(signedTx)
-	//hash := signedTx.Hash()
+	//hash := getTxHash(signedTx)
+	hash := signedTx.Hash()
 	time.Sleep(time.Second * 10)
 
 	receipt, err := client.TransactionReceipt(context.Background(), hash)
@@ -239,7 +239,7 @@ func writeContract(client *ethclient.Client,
 
 func writeContractTx(nonce uint64, contractAddr common.Address, gasPrice *big.Int) *types.Transaction {
 	value := big.NewInt(0)
-	gasLimit := uint64(254612)
+	gasLimit := uint64(8000000)
 
 	//num := big.NewInt(999)
 	data, err := sampleContractABI.Pack("add")
