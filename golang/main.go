@@ -117,7 +117,7 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		if nonce/50 == count+1 && nonce != nonceF {
+		if nonce/10 == count+1 && nonce != nonceF {
 			watch <- nonce
 			nonceF = nonce
 			count++
