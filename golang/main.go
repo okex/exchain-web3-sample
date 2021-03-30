@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"math/big"
+	"runtime/debug"
 	"time"
 
 	authclient "github.com/cosmos/cosmos-sdk/x/auth/client/utils"
@@ -177,6 +178,7 @@ func deployContract(client *ethclient.Client,
 	// 3. send rawTx
 	err = client.SendTransaction(context.Background(), signedTx)
 	if err != nil {
+		debug.PrintStack()
 		panic(err)
 	}
 
